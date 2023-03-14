@@ -1,9 +1,18 @@
 package com.ll.basic1;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 // @Controller 의 의미
 // 개발자가 스프링부트에게 말한다.
@@ -34,15 +43,12 @@ public class HomeController {
 //    }
     private int cnt;
 
-    public HomeController() {
-        cnt =-1;
-    }
 
     @GetMapping("home/increase")
     @ResponseBody
     public String showM() {
         cnt++;
-        return "응답 : "+cnt;
+        return "응답 : " + cnt;
     }
 
     @GetMapping("home/plus")
@@ -52,6 +58,65 @@ public class HomeController {
         return "응답 : " + (a+b);
     }
 
+    private ArrayList<Person> personArrayList;
+
+    public HomeController() {
+        cnt =-1;
+        personArrayList = new ArrayList<>();
+    }
+
+    @GetMapping("home/addPerson")
+    @ResponseBody
+    public String addPerson(@RequestParam String name, @RequestParam int age) {
+
+        Person person = new Person(name, age);
+
+        personArrayList.add(person);
+
+        return personArrayList.size() + "번째 사람 입력했습니다.";
+    }
+
+    @GetMapping("home/people")
+    @ResponseBody
+    public List allFindPeople() {
+
+        return personArrayList;
+    }
+
+    @GetMapping("home/removePerson")
+    @ResponseBody
+    public String removePeople(@RequestParam int id) {
+
+        for (int i = 0; i < personArrayList.size(); i++) {
+            Person p = personArrayList.get(i);
+            if (p.getId() == id) {
+                personArrayList.remove(i);
+                return id+ "번 사람이 삭제되어야 함";
+            }
+        }
+
+        return "아이디가 없습니다.";
+    }
+
+
+}
+@AllArgsConstructor
+@Getter
+@ToString
+class Person{
+
+    private static int lastId;
+    private final int id;
+    private final String name;
+    private final int age;
+
+    static {
+        lastId=0;
+    }
+
+    Person(String name, int age) {
+        this(++lastId, name, age);
+    }
 
 }
 
