@@ -2,6 +2,7 @@ package com.ll.basic1;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,17 +99,35 @@ public class HomeController {
         return "아이디가 없습니다.";
     }
 
+    @GetMapping("home/modifyPerson")
+    @ResponseBody
+    public String updatePeople(@RequestParam int id , String name, int age) {
+
+        for (int i = 0; i < personArrayList.size(); i++) {
+            Person p = personArrayList.get(i);
+            if (p.getId() == id) {
+                p.setName(name);
+                p.setAge(age);
+                personArrayList.set(i,p);
+                return id+ "번 사람이 수정되었습니다";
+            }
+        }
+
+        return "아이디가 없습니다.";
+    }
+
 
 }
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 class Person{
 
     private static int lastId;
     private final int id;
-    private final String name;
-    private final int age;
+    private String name;
+    private int age;
 
     static {
         lastId=0;
@@ -116,6 +135,11 @@ class Person{
 
     Person(String name, int age) {
         this(++lastId, name, age);
+    }
+
+    public void setPerson(String name, int age) {
+        this.name = name;
+        this.age = age;
     }
 
 }
