@@ -2,6 +2,7 @@ package com.ll.basic1;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 // @Controller 의 의미
@@ -43,6 +44,14 @@ public class HomeController {
         cnt++;
         return "응답 : "+cnt;
     }
+
+    @GetMapping("home/plus")
+    @ResponseBody
+    public String showMM(@RequestParam("a") int a, @RequestParam("b") int b) {
+
+        return "응답 : " + (a+b);
+    }
+
 
 }
 
