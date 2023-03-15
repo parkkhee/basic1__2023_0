@@ -2,14 +2,18 @@ package com.ll.basic1.boundedContext.member.controller;
 
 import com.ll.basic1.base.RsData;
 import com.ll.basic1.boundedContext.member.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MemberController {
+
     private final MemberService memberService;
 
+    // 생성자 주입
+    @Autowired
     public MemberController() {
         memberService = new MemberService();
     }

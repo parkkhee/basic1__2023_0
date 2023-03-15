@@ -4,6 +4,7 @@ import com.ll.basic1.base.RsData;
 import com.ll.basic1.boundedContext.member.entity.Member;
 import com.ll.basic1.boundedContext.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class MemberService {
     public MemberService() {
         memberRepository = new MemberRepository();
     }
-
 
     public RsData tryLogin(String username, String password) {
 //        if (!password.equals("1234")) {

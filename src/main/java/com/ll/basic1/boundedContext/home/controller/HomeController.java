@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,8 @@ public class HomeController {
 //        return "즐겁습니다";
 //    }
     private int cnt;
+    // 필드 주입
+    @Autowired
     private MemberService memberService;
 
 
@@ -68,7 +71,7 @@ public class HomeController {
     public HomeController() {
         cnt =-1;
         personArrayList = new ArrayList<>();
-        memberService = new MemberService();
+//        memberService = new MemberService();
     }
 
     @GetMapping("home/addPerson")
