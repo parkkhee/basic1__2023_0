@@ -1,15 +1,18 @@
-package com.ll.basic1;
+package com.ll.basic1.boundedContext.home.controller;
 
+import com.ll.basic1.boundedContext.member.entity.Member;
+import com.ll.basic1.boundedContext.member.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,6 +46,7 @@ public class HomeController {
 //        return "즐겁습니다";
 //    }
     private int cnt;
+    private MemberService memberService;
 
 
     @GetMapping("home/increase")
@@ -64,6 +68,7 @@ public class HomeController {
     public HomeController() {
         cnt =-1;
         personArrayList = new ArrayList<>();
+        memberService = new MemberService();
     }
 
     @GetMapping("home/addPerson")
@@ -115,6 +120,35 @@ public class HomeController {
 
         return "아이디가 없습니다.";
     }
+
+    @GetMapping("home/count")
+    @ResponseBody
+    public int showCookieIncrease(HttpServletRequest req , HttpServletResponse resp) throws IOException {
+        int countInCookie =0;
+
+        if (req.getCookies() != null) {
+            countInCookie = Arrays.stream(req.getCookies())
+                    .filter(cookie -> cookie.getName().equals("count"))
+                    .map(cookie -> cookie.getValue())
+                    .mapToInt(Integer::parseInt)
+                    .findFirst()
+                    .orElse(0);
+        }
+
+        int newCountInCookie = countInCookie + 1;
+
+        resp.addCookie(new Cookie("count", newCountInCookie + ""));
+
+        return newCountInCookie;
+    }
+
+
+    @GetMapping("/home/user1")
+    @ResponseBody
+    public Member showUser1() {
+        return memberService.findByUsername("user1");
+    }
+
 
 
 }
