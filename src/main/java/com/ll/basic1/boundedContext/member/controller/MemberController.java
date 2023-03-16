@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -41,7 +42,7 @@ public class MemberController {
         return "usr/member/login";
     }
 
-    @GetMapping("/member/doLogin")
+    @PostMapping("/member/login")
     @ResponseBody
     public RsData login(String username, String password) {
 
@@ -57,11 +58,35 @@ public class MemberController {
 
         if (rsData.isSuccess()) {
             Member member = (Member) rsData.getData();
-            rq.setCookie("loginedMemberId",member.getId());
+//            rq.setCookie("loginedMemberId",member.getId());
+            rq.setSession("loginedMemberId", member.getId());
         }
+
 
         return rsData;
     }
+
+//    @GetMapping("/member/doLogin")
+//    @ResponseBody
+//    public RsData login(String username, String password) {
+//
+//        if (username == null || username.trim().length() == 0) {
+//            return RsData.of("F-3", "username(을)를 입력해주세요.");
+//        }
+//
+//        if (password == null || password.trim().length() == 0) {
+//            return RsData.of("F-4", "password(을)를 입력해주세요.");
+//        }
+//
+//        RsData rsData = memberService.tryLogin(username, password);
+//
+//        if (rsData.isSuccess()) {
+//            Member member = (Member) rsData.getData();
+//            rq.setCookie("loginedMemberId",member.getId());
+//        }
+//
+//        return rsData;
+//    }
 
     @GetMapping("/member/logout")
     @ResponseBody
