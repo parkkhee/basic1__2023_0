@@ -25,10 +25,25 @@ public class MemberController {
 //        this.memberService = memberService;
 //    }
 
+
     @GetMapping("/member/login")
+//    @ResponseBody
+    public String showLogin() {
+//        if (rq.isLogined()) {
+//            return """
+//                    <h1>이미 로그인 되었습니다.</h1>
+//                    """.stripIndent();
+//        }
+        if (rq.isLogined()) {
+            return "usr/member/isLogined";
+        }
+
+        return "usr/member/login";
+    }
+
+    @GetMapping("/member/doLogin")
     @ResponseBody
-    public RsData login(String username, String password, HttpServletRequest req, HttpServletResponse resp) {
-        Rq rq = new Rq(req, resp);
+    public RsData login(String username, String password) {
 
         if (username == null || username.trim().length() == 0) {
             return RsData.of("F-3", "username(을)를 입력해주세요.");
@@ -50,9 +65,10 @@ public class MemberController {
 
     @GetMapping("/member/logout")
     @ResponseBody
-    public RsData logout(HttpServletRequest req, HttpServletResponse resp) {
-        Rq rq = new Rq(req, resp);
-        boolean cookieRemoved = rq.removeCookie("loginedMemberId");
+    public RsData logout() {
+
+//        boolean cookieRemoved = rq.removeCookie("loginedMemberId");
+        boolean cookieRemoved = rq.removeSession("loginedMemberId");
 
         if (cookieRemoved == false) {
             return RsData.of("S-2", "이미 로그아웃 상태입니다.");
@@ -63,11 +79,11 @@ public class MemberController {
 
     @GetMapping("/member/me")
     @ResponseBody
-    public RsData showMe(HttpServletRequest req, HttpServletResponse resp) {
-        Rq rq = new Rq(req, resp);
+    public RsData showMe() {
 
-        long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
+//        long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
 
+        long loginedMemberId = rq.getSessionAsLong("loginedMemberId", 0);
         boolean isLogined = loginedMemberId > 0;
 
         if (isLogined == false)
@@ -77,4 +93,12 @@ public class MemberController {
 
         return RsData.of("S-1", "당신의 username(은)는 %s 입니다.".formatted(member.getUsername()));
     }
+
+    // 디버깅용 함수
+    @GetMapping("/member/session")
+    @ResponseBody
+    public String showSession() {
+        return rq.getSessionDebugContents().replaceAll("\n", "<br>");
+    }
+
 }
