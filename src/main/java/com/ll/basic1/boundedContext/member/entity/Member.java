@@ -12,6 +12,7 @@ public class Member {
     private String username;
     private String password;
 
+
     static {
         lastid=0;
     }

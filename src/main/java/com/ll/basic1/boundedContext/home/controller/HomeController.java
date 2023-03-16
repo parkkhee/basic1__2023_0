@@ -48,9 +48,10 @@ public class HomeController {
 //    }
     private int cnt;
     // 필드 주입
-    @Autowired
-    private MemberService memberService;
+//    @Autowired
+//    private MemberService memberService;
 
+    private final MemberService memberService;
 
     @GetMapping("home/increase")
     @ResponseBody
@@ -68,10 +69,11 @@ public class HomeController {
 
     private ArrayList<Person> personArrayList;
 
-    public HomeController() {
+    public HomeController(MemberService memberService) {
         cnt =-1;
         personArrayList = new ArrayList<>();
 //        memberService = new MemberService();
+        this.memberService = memberService;
     }
 
     @GetMapping("home/addPerson")

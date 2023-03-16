@@ -15,11 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
-
-    public MemberService() {
-        memberRepository = new MemberRepository();
-    }
+//    private MemberRepository memberRepository;
+//
+//    public MemberService() {
+//        memberRepository = new MemberRepository();
+//    }
+    private final MemberRepository memberRepository;
 
     public RsData tryLogin(String username, String password) {
 //        if (!password.equals("1234")) {
@@ -38,11 +39,17 @@ public class MemberService {
         }
 
 
-        return RsData.of("S-1", "%s 님 환영합니다.".formatted(username));
+        return RsData.of("S-1", "%s 님 환영합니다.".formatted(username),member.getId());
     }
 
 
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username);
+    }
+
+    public Member findById(long userId) {
+
+        return memberRepository.findById(userId);
+
     }
 }
