@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,9 +36,7 @@ public class MemberController {
 //                    <h1>이미 로그인 되었습니다.</h1>
 //                    """.stripIndent();
 //        }
-        if (rq.isLogined()) {
-            return "usr/member/isLogined";
-        }
+
 
         return "usr/member/login";
     }
@@ -103,21 +102,32 @@ public class MemberController {
     }
 
     @GetMapping("/member/me")
-    @ResponseBody
-    public RsData showMe() {
-
-//        long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
-
-        long loginedMemberId = rq.getSessionAsLong("loginedMemberId", 0);
-        boolean isLogined = loginedMemberId > 0;
-
-        if (isLogined == false)
-            return RsData.of("F-1", "로그인 후 이용해주세요.");
+    public String showMe(Model model) {
+        long loginedMemberId = rq.getLoginedMemberId();
 
         Member member = memberService.findById(loginedMemberId);
 
-        return RsData.of("S-1", "당신의 username(은)는 %s 입니다.".formatted(member.getUsername()));
+        model.addAttribute("member", member);
+
+        return "usr/member/me";
     }
+
+//    @GetMapping("/member/me")
+//    @ResponseBody
+//    public RsData showMe() {
+//
+////        long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
+//
+//        long loginedMemberId = rq.getSessionAsLong("loginedMemberId", 0);
+//        boolean isLogined = loginedMemberId > 0;
+//
+//        if (isLogined == false)
+//            return RsData.of("F-1", "로그인 후 이용해주세요.");
+//
+//        Member member = memberService.findById(loginedMemberId);
+//
+//        return RsData.of("S-1", "당신의 username(은)는 %s 입니다.".formatted(member.getUsername()));
+//    }
 
     // 디버깅용 함수
     @GetMapping("/member/session")
