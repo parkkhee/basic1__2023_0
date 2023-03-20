@@ -32,7 +32,6 @@ public class ArticleController {
         return RsData.of("S-1","1번 글이 생성되었습니다.",servicedArticle);
     }
 
-
 }
 
 

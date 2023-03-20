@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  profiles:
+    active: dev #기본적으로 dev 환경임을 명시
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/
@@ -16,7 +18,8 @@ spring:
     password: qkr96#
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create  #create update
+
     properties:
       hibernate:
         show_sql: true #sql ??
